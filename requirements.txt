@@ -16,3 +16,6 @@ packaging==24.1  # Upgrade from 23.2 to meet ZenML's requirement
 protobuf==4.25.6  # Downgrade to meet kfp's and kfp-pipeline-spec's requirement
 python-dotenv>=0.21.0  # Ensure compatibility with pydantic-settings
 matplotlib
+
+torchvision
+python-jose

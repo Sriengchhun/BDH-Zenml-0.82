@@ -4,8 +4,8 @@ from zenml.integrations.bentoml.steps import bentoml_model_deployer_step
 
 bentoml_model_deployer = bentoml_model_deployer_step.with_options(
     parameters=dict(
-        model_name=MODEL_NAME,  # Name of the model
-        port=7002,  # Port to be used by the http server
+        # model_name=MODEL_NAME,  # Name of the model
+        port=8006,  # Port to be used by the http server
         production=False,  # Deploy the model in production mode
         timeout=1000,
     )

@@ -3,21 +3,12 @@ from sklearn.metrics import accuracy_score
 from sklearn.base import BaseEstimator
 from zenml import step
 from sklearn.metrics import accuracy_score, precision_score, recall_score, f1_score
-
-# @step
-# def evaluator(
-#     X_test: pd.DataFrame, 
-#     y_test: pd.Series, 
-#     model: ClassifierMixin
-# ) -> float:
-#     """Evaluates the scikit-learn model."""
-#     y_pred = model.predict(X_test)
-#     acc = accuracy_score(y_test, y_pred)
-#     print(f"Test Accuracy: {acc * 100:.2f}%")
-#     return acc
+import sys
+import json
 
 @step
 def evaluator(
+    model_id: int,
     X_test: pd.DataFrame, 
     y_test: pd.Series, 
     model: BaseEstimator
@@ -39,6 +30,14 @@ def evaluator(
     print(f"Precision     : {precision:.4f}")
     print(f"Recall        : {recall:.4f}")
     print(f"F1 Score      : {f1:.4f}")
+    
+    ''' update evaluation to db'''
+    # setting path postgresqlDB
+    sys.path.append('/app/')
+    from postgresqlDB import ConnectPostgresqlDB
+
+    db = ConnectPostgresqlDB()
+    db.update_evaluation(model_id, json.dumps({"Test_Accuracy": f'{acc * 100:.6f}%'}))
 
     return acc
 

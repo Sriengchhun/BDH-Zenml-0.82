@@ -1,21 +1,36 @@
-version: "3.9"
+# version: "3.9"
+
 services:
   mysql:
     image: mysql:8.0
+    restart: on-failure
+    ports:
+      - 3303:3307
     networks:
       database:
         aliases:
           - db
     environment:
-      - MYSQL_ROOT_PASSWORD=1234
+      - MYSQL_ROOT_PASSWORD=password
+  pgsql:
+    image: timescale/timescaledb:latest-pg12
+    restart: on-failure
+    ports:
+      - 3008:5432
+    volumes:
+      - ./pgsql-data:/var/lib/postgresql/data
+    environment:
+      POSTGRES_PASSWORD: x-brain
+    networks:
+      postgresqlDB:
+        aliases:
+          - postgresql-db
   zenml:
     build:
       context: .
       dockerfile: Dockerfile
-
     user: root
     ports:
-      # - "9191:9091" ## Zenml dash board for this container
       - 5002:9002
       - "7000:7000"
       - "7001:7001"
@@ -30,13 +45,19 @@ services:
       - "7010:7010"     # - 3334:3334  ## Port for first run Covid-19 model
     networks:
       database:
-    environment:
-      - ZENML_STORE_URL=mysql://root:1234@db/zenml
-      - ZENML_DEFAULT_USER_NAME=admin
-      - ZENML_DEFAULT_USER_PASSWORD=Bdh_xbrain@169
     volumes:
-      - /home/sriengchhunchheang/BDH-Zenml-V-082:/app
+      - /home/sriengchhun_chheang/BDH-Zenml-0.82:/app
       - /mnt/xbraindata:/data/local-files
+    environment:
+
+      - ZENML_STORE_URL=mysql://root:password@db/zenml
+      - ZENML_DEFAULT_USER_NAME=admin
+      - ZENML_DEFAULT_USER_PASSWORD=zenml
+      - POSTGRES_DATABASE_NAME=postgres
+      - POSTGRES_USER_NAME=postgres
+      - POSTGRES_PASSWORD=x-brain
+      - POSTGRES_HOST_IP=192.168.122.140
+      - POSTGRES_PORT=3008
     links:
       - mysql
     depends_on:
@@ -44,9 +65,10 @@ services:
     extra_hosts:
       - "host.docker.internal:host-gateway"
     restart: on-failure
-
 networks:
   database:
     external: false
+  postgresqlDB:
+    external: false
 
-
+### Zenml password: Bdh_xbrain@169

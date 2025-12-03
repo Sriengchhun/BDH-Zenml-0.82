@@ -12,6 +12,7 @@ COPY . /app
 # RUN pip install --no-cache-dir -r requirements.txt
 
 # Update and install any system dependencies (if needed)
+
 RUN rm -rf /var/lib/apt/lists/*  
 
 EXPOSE 9002

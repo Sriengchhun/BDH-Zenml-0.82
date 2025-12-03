@@ -16,6 +16,8 @@ docker_settings = DockerSettings(required_integrations=[BENTOML])
     
 @pipeline(enable_cache=False, settings={"docker": docker_settings})
 def Training_pipeline_for_Anomaly_Classification(
+    model_id: int,
+    model_name: str,
     table_name: str,
     test_size: float = 0.2,
     n_estimators: int = 100,
@@ -34,6 +36,7 @@ def Training_pipeline_for_Anomaly_Classification(
     trained_model, training_acc = train_model(
         X_train=X_train,
         y_train=y_train,   # unused but required by ZenML signatures
+        model_name=model_name,
         n_estimators=n_estimators,
         max_samples=max_samples,
         contamination=contamination,
@@ -44,7 +47,7 @@ def Training_pipeline_for_Anomaly_Classification(
         verbose=verbose
     )
     
-    test_accuracy = evaluator(X_test=X_test, y_test=y_test, model=trained_model)
+    test_accuracy = evaluator(model_id=model_id, X_test=X_test, y_test=y_test, model=trained_model)
     decision = deployment_trigger(accuracy=test_accuracy, min_accuracy=0.60)
-    bento = bento_builder(model=trained_model)
-    bentoml_model_deployer(bento=bento, deploy_decision=decision)
+    bento = bento_builder(model=trained_model, model_name=model_name)
+    bentoml_model_deployer(bento=bento, deploy_decision=decision, model_name=model_name)

@@ -49,7 +49,7 @@ def _ensure_datetime(series: pd.Series, colname: str = "ts") -> pd.Series:
 @step
 def query_database(table_name: str) -> pd.DataFrame:
     # Replace with your PostgreSQL connection details
-    connection_string = 'postgresql://airflow:airflow@10.90.1.4:5433/postgres'
+    connection_string = 'postgresql://airflow:airflow@10.115.1.18:5433/postgres'
     engine = create_engine(connection_string)
     query = f"SELECT * FROM {table_name}"
     with engine.connect() as connection:
@@ -64,8 +64,8 @@ def training_data_loader(table_name: str, test_size: float = 0.2) -> Tuple[
     Annotated[pd.Series, "y_test"],
 ]:
     logging.info("Loading IoT dataset...")
-    df = query_database(table_name)
-    # df = pd.read_csv("steps/df_AIoT_Sensor.csv")
+    # df = query_database(table_name)
+    df = pd.read_csv("steps/df_AIoT_Sensor.csv")
 
     # Normalize columns
     df.columns = ['idx', '_id', 'id', 'type', 'ts', 'crt', 'mdt', 'dts',

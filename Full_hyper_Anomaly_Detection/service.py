@@ -6,8 +6,8 @@ import numpy as np
 import bentoml
 from bentoml.io import JSON
 from fastapi import FastAPI
-
-from constants import MODEL_NAME, SERVICE_NAME
+import os
+# from constants import MODEL_NAME, SERVICE_NAME
 
 # ---------- FastAPI (for OpenAPI/Swagger) ----------
 app = FastAPI()
@@ -24,6 +24,9 @@ class SensorData(BaseModel):
     humidity: Optional[float] = 36.10
     lux: Optional[float] = 0.14
     soil: Optional[float] = 82.20
+
+MODEL_NAME = os.getenv("MODEL_NAME_Anomaly")
+SERVICE_NAME = f"{MODEL_NAME}_Service"
 
 # ---------- Bento: load model & runner ----------
 # Runner is recommended for concurrency and scaling

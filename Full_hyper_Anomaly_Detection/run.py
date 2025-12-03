@@ -3,6 +3,8 @@ from typing import Optional, Union
 
 from constants import MODEL_NAME, PIPELINE_NAME, PIPELINE_STEP_NAME  # keep if used elsewhere
 from pipelines.training_model import Training_pipeline_for_Anomaly_Classification
+import datetime
+import sys
 
 DEPLOY = "deploy"
 PREDICT = "predict"
@@ -170,8 +172,20 @@ def validate_max_features(ctx, param, value):
     default=0,
     help="scikit-learn verbosity. Default: 0",
 )
+@click.option(
+    "--model_id",
+    type=int,
+)
+
+@click.option(
+    "--model_name",
+    type=str,
+    default="activity",
+)
 def main(
     config: str,
+    model_id: int,
+    model_name: str,
     test_size: float,
     table_name: str,
     n_estimators: int,
@@ -194,7 +208,20 @@ def main(
     )
 
     if deploy:
+        run_name = f"Anomaly_classification_pipeline-{datetime.datetime.now().strftime('%Y_%m_%d-%H_%M_%S_%f')}"
+
+        ''' update evaluation to db'''
+        # setting path postgresqlDB
+        sys.path.append('/app/')
+        from postgresqlDB import ConnectPostgresqlDB
+
+        db = ConnectPostgresqlDB()
+        db.update_run_name(model_id, run_name)
+        print(run_name)
+
         Training_pipeline_for_Anomaly_Classification(
+            model_id=model_id,
+            model_name=model_name,
             table_name=table_name,
             test_size=test_size,
             n_estimators=n_estimators,
@@ -217,4 +244,6 @@ if __name__ == "__main__":
 
 
 # python run.py --config deploy --table_name nexpie_sensors --contamination 0.05 --n_estimators 200 --n_jobs -1
-# python run.py --config deploy --table_name nexpie_sensors --contamination 0.05 --n_estimators 200 --n_jobs -1
+# python run.py --config deploy --model_id 10 --model_name anomaly --table_name nexpie_sensors --contamination 0.05 --n_estimators 200 --n_jobs -1
+# python run.py --model_id 10 --model_name anomaly --table_name nexpie_sensors --contamination 0.05 --n_estimators 200 --n_jobs -1
+

@@ -9,11 +9,14 @@ from datetime import datetime
 import pytz
 from sklearn.ensemble import IsolationForest
 import numpy as np
+import os
+
 
 @step(enable_cache=False)
 def train_model(
     X_train: pd.DataFrame,
     y_train: pd.Series,
+    model_name: str,
     selected_model: Optional[str] = "Decision_Tree",
     n_estimators: int = 100,
     max_samples: Union[int, float, str] = "auto",
@@ -66,6 +69,8 @@ def train_model(
     thailand_time_formatted = thailand_time.strftime("%Y-%m-%d-%H-%M-%S")
     logging.info("IsolationForest has been trained successfully.")
     print(f" Time stamp = {thailand_time_formatted}")
+
+    os.environ["MODEL_NAME_Anomaly"] = model_name
 
     # Return model and "training_acc" placeholder as inlier rate
     train_acc = inlier_rate
