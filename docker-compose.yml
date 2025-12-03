@@ -1,0 +1,52 @@
+version: "3.9"
+services:
+  mysql:
+    image: mysql:8.0
+    networks:
+      database:
+        aliases:
+          - db
+    environment:
+      - MYSQL_ROOT_PASSWORD=1234
+  zenml:
+    build:
+      context: .
+      dockerfile: Dockerfile
+
+    user: root
+    ports:
+      # - "9191:9091" ## Zenml dash board for this container
+      - 5002:9002
+      - "7000:7000"
+      - "7001:7001"
+      - "7002:7002"
+      - "7003:7003"
+      - "7004:7004"
+      - "7005:7005"
+      - "7006:7006"
+      - "7007:7007"
+      - "7008:7008"
+      - "7009:7009"
+      - "7010:7010"     # - 3334:3334  ## Port for first run Covid-19 model
+    networks:
+      database:
+    environment:
+      - ZENML_STORE_URL=mysql://root:1234@db/zenml
+      - ZENML_DEFAULT_USER_NAME=admin
+      - ZENML_DEFAULT_USER_PASSWORD=Bdh_xbrain@169
+    volumes:
+      - /home/sriengchhunchheang/BDH-Zenml-V-082:/app
+      - /mnt/xbraindata:/data/local-files
+    links:
+      - mysql
+    depends_on:
+      - mysql
+    extra_hosts:
+      - "host.docker.internal:host-gateway"
+    restart: on-failure
+
+networks:
+  database:
+    external: false
+
+
