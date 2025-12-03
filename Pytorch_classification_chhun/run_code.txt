@@ -1,0 +1,12 @@
+python run.py -c train_and_deploy --model_id 1 --mode Default --project_id 131 --model_name test --input_path /data/local-files/?d=input/608175dae5cd71001119f3bd/25/169 --input_classes [{"name": "dog", "sub_folderID": "171"}, {"name": "cat", "sub_folderID": "170"}] --batch_size 4 --neural_network_architecture ResNet50 --weights IMAGENET1K_V2 --learning_rate 0.001
+
+
+python run.py -c train_and_deploy --model_id 1 --mode Default --project_id 131 --model_name test --input_path "/data/local-files/?d=input/608175dae5cd71001119f3bd/25/169" --input_classes "[{\"name\":\"dog\",\"sub_folderID\":\"171\"},{\"name\":\"cat\",\"sub_folderID\":\"170\"}]" --batch_size 4 --neural_network_architecture ResNet50 --weights IMAGENET1K_V2 --learning_rate 0.001
+608175dae5cd71001119f3bd
+python run.py -c train_and_deploy --model_id 1 --mode Default --project_id 131 --model_name test --input_path "/data/local-files/?d=input/608175dae5cd71001119f3bd/25/169" --input_classes "[{\"name\":\"dog\",\"sub_folderID\":\"171\"},{\"name\":\"cat\",\"sub_folderID\":\"170\"}]" --batch_size 4 --neural_network_architecture ResNet50 --weights IMAGENET1K_V2 --learning_rate 0.001
+
+
+python run.py -c train_and_deploy --model_id 1 --mode Default --project_id 131 --model_name test --input_path "/app/Pytorch_classification/datasets/data_local" --input_classes "[{\"name\":\"dog\",\"sub_folderID\":\"171\"},{\"name\":\"cat\",\"sub_folderID\":\"170\"}]" --batch_size 4 --neural_network_architecture ResNet50 --weights IMAGENET1K_V2 --learning_rate 0.001
+
+
+python run.py -c train_and_deploy --model_id 1 --mode Default --project_id 131 --model_name test --input_path "/app/Pytorch_classification/datasets/data_local" --input_classes "[{\"name\":\"dog\",\"sub_folderID\":\"dog\"},{\"name\":\"cat\",\"sub_folderID\":\"cat\"}]" --batch_size 4 --neural_network_architecture ResNet50 --weights IMAGENET1K_V2 --learning_rate 0.001
